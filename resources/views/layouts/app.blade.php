@@ -8,9 +8,8 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-100 tracking-tight">
   <div class="min-h-screen">
-    <!-- Navigation -->
     <nav class="bg-white shadow">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
