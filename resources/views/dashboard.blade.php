@@ -1,74 +1,58 @@
-<x-app-layout>
-  <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-      {{ __('Dashboard') }}
-    </h2>
-  </x-slot>
+@extends('layouts.app')
 
+@section('content')
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-      <!-- Statistik -->
-      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-8">
-        <!-- Total Books -->
-        <div class="bg-white shadow-sm sm:rounded-lg p-6">
-          <h3 class="text-lg font-medium text-gray-900">Total Books</h3>
-          <p class="mt-2 text-3xl font-bold text-indigo-600">{{ \App\Models\Book::count() }}</p>
-          <p class="mt-1 text-sm text-gray-500">Books in the library</p>
-        </div>
-        <!-- Available Books -->
-        <div class="bg-white shadow-sm sm:rounded-lg p-6">
-          <h3 class="text-lg font-medium text-gray-900">Available Books</h3>
-          <p class="mt-2 text-3xl font-bold text-indigo-600">{{ \App\Models\Book::where('stock', '>', 0)->count() }}</p>
-          <p class="mt-1 text-sm text-gray-500">Books with stock</p>
-        </div>
-        <!-- Total Categories -->
-        <div class="bg-white shadow-sm sm:rounded-lg p-6">
-          <h3 class="text-lg font-medium text-gray-900">Total Categories</h3>
-          <p class="mt-2 text-3xl font-bold text-indigo-600">{{ \App\Models\Category::count() }}</p>
-          <p class="mt-1 text-sm text-gray-500">Book categories</p>
-        </div>
-        <!-- Total Publishers -->
-        <div class="bg-white shadow-sm sm:rounded-lg p-6">
-          <h3 class="text-lg font-medium text-gray-900">Total Publishers</h3>
-          <p class="mt-2 text-3xl font-bold text-indigo-600">{{ \App\Models\Publisher::count() }}</p>
-          <p class="mt-1 text-sm text-gray-500">Book publishers</p>
-        </div>
-        <!-- Total Authors -->
-        <div class="bg-white shadow-sm sm:rounded-lg p-6">
-          <h3 class="text-lg font-medium text-gray-900">Total Authors</h3>
-          <p class="mt-2 text-3xl font-bold text-indigo-600">{{ \App\Models\Author::count() }}</p>
-          <p class="mt-1 text-sm text-gray-500">Book authors</p>
-        </div>
-        <!-- Active Loans -->
-        <div class="bg-white shadow-sm sm:rounded-lg p-6">
-          <h3 class="text-lg font-medium text-gray-900">Active Loans</h3>
-          <p class="mt-2 text-3xl font-bold text-indigo-600">
-            {{ \App\Models\Loan::where('is_returned', false)->count() }}</p>
-          <p class="mt-1 text-sm text-gray-500">Books currently borrowed</p>
-        </div>
-      </div>
+      <!-- Title -->
+      <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-6">
+        {{ __('Dashboard') }}
+      </h2>
 
-      <!-- Quick Links -->
-      <div class="bg-white shadow-sm sm:rounded-lg p-6">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">Quick Links</h3>
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <a href="{{ route('books.index') }}"
-            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">Manage
-            Books</a>
-          <a href="{{ route('categories.index') }}"
-            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">Manage
-            Categories</a>
-          <a href="{{ route('publishers.index') }}"
-            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">Manage
-            Publishers</a>
-          <a href="{{ route('authors.index') }}"
-            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">Manage
-            Authors</a>
-          <a href="{{ route('loans.index') }}"
-            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">Manage
-            Loans</a>
+      <!-- Statistik Grid -->
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+
+        <!-- Total Buku -->
+        <div class="bg-white shadow-lg rounded-lg p-6 border-l-4 border-indigo-500">
+          <h3 class="text-lg font-medium text-gray-900">Total Buku</h3>
+          <p class="mt-2 text-3xl font-bold text-indigo-600">{{ $total_books }}</p>
+          <p class="mt-1 text-sm text-gray-500">Buku di perpustakaan</p>
+        </div>
+
+        <!-- Buku Tersedia -->
+        <div class="bg-white shadow-lg rounded-lg p-6 border-l-4 border-green-500">
+          <h3 class="text-lg font-medium text-gray-900">Buku Tersedia</h3>
+          <p class="mt-2 text-3xl font-bold text-green-600">{{ $available_books }}</p>
+          <p class="mt-1 text-sm text-gray-500">Buku dengan stok</p>
+        </div>
+
+        <!-- Total Kategori -->
+        <div class="bg-white shadow-lg rounded-lg p-6 border-l-4 border-blue-500">
+          <h3 class="text-lg font-medium text-gray-900">Total Kategori</h3>
+          <p class="mt-2 text-3xl font-bold text-blue-600">{{ $total_categories }}</p>
+          <p class="mt-1 text-sm text-gray-500">Kategori buku</p>
+        </div>
+
+        <!-- Total Penerbit -->
+        <div class="bg-white shadow-lg rounded-lg p-6 border-l-4 border-teal-500">
+          <h3 class="text-lg font-medium text-gray-900">Total Penerbit</h3>
+          <p class="mt-2 text-3xl font-bold text-teal-600">{{ $total_publishers }}</p>
+          <p class="mt-1 text-sm text-gray-500">Penerbit buku</p>
+        </div>
+
+        <!-- Total Penulis -->
+        <div class="bg-white shadow-lg rounded-lg p-6 border-l-4 border-purple-500">
+          <h3 class="text-lg font-medium text-gray-900">Total Penulis</h3>
+          <p class="mt-2 text-3xl font-bold text-purple-600">{{ $total_authors }}</p>
+          <p class="mt-1 text-sm text-gray-500">Penulis buku</p>
+        </div>
+
+        <!-- Peminjaman Aktif -->
+        <div class="bg-white shadow-lg rounded-lg p-6 border-l-4 border-red-500">
+          <h3 class="text-lg font-medium text-gray-900">Peminjaman Aktif</h3>
+          <p class="mt-2 text-3xl font-bold text-red-600">{{ $active_loans }}</p>
+          <p class="mt-1 text-sm text-gray-500">Buku yang sedang dipinjam</p>
         </div>
       </div>
     </div>
   </div>
-</x-app-layout>
+@endsection

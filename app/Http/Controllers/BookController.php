@@ -12,7 +12,7 @@ class BookController extends Controller
 {
     public function index()
     {
-        $books = Book::with(['category', 'publisher', 'authors'])->paginate(10);
+        $books = Book::with(['category', 'publisher', 'authors'])->simplePaginate(7);
         return view('books.index', compact('books'));
     }
 

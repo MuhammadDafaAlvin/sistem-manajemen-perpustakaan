@@ -9,7 +9,7 @@ class PublisherController extends Controller
 {
     public function index()
     {
-        $publishers = Publisher::paginate(10);
+        $publishers = Publisher::simplePaginate(7);
         return view('publishers.index', compact('publishers'));
     }
 
