@@ -1,36 +1,57 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ config('app.name', 'Library Management') }}</title>
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
-
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+<body class="bg-gray-100 font-sans">
+  <div class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex">
+            <div class="flex-shrink-0 flex items-center">
+              <a href="{{ route('dashboard') }}" class="text-xl font-bold">Library</a>
+            </div>
+            @auth
+              <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <a href="{{ route('books.index') }}"
+                  class="border-b-2 border-transparent text-gray-500 hover:border-indigo-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Books</a>
+                <a href="{{ route('categories.index') }}"
+                  class="border-b-2 border-transparent text-gray-500 hover:border-indigo-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Categories</a>
+                <a href="{{ route('publishers.index') }}"
+                  class="border-b-2 border-transparent text-gray-500 hover:border-indigo-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Publishers</a>
+                <a href="{{ route('authors.index') }}"
+                  class="border-b-2 border-transparent text-gray-500 hover:border-indigo-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Authors</a>
+              </div>
+            @endauth
+          </div>
+          <div class="hidden sm:ml-6 sm:flex sm:items-center">
+            @auth
+              <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="text-gray-500 hover:text-gray-700 text-sm font-medium">Logout</button>
+              </form>
+            @else
+              <a href="{{ route('login') }}" class="text-gray-500 hover:text-gray-700 text-sm font-medium">Login</a>
+              <a href="{{ route('register') }}"
+                class="ml-4 text-gray-500 hover:text-gray-700 text-sm font-medium">Register</a>
+            @endauth
+          </div>
         </div>
-    </body>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      @yield('content')
+    </main>
+  </div>
+</body>
+
 </html>
