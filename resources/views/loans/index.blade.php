@@ -27,9 +27,9 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $loan->id }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $loan->user->name }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $loan->book->title }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $loan->loan_date->format('d/m/Y') }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $loan->loan_date }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ $loan->return_date ? $loan->return_date->format('d/m/Y') : '-' }}</td>
+                {{ $loan->return_date ? $loan->return_date : '-' }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $loan->is_returned ? 'Yes' : 'No' }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 <a href="{{ route('loans.edit', $loan) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>

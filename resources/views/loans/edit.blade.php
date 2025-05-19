@@ -6,7 +6,7 @@
       <h3 class="text-lg leading-6 font-medium text-gray-900">Edit Loan</h3>
     </div>
     <form action="{{ route('loans.update', $loan) }}" method="POST" class="px-4 py-5 sm:p-6">
-      @ doanh văn linh
+      @csrf
       @method('PUT')
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div>
@@ -41,8 +41,7 @@
         </div>
         <div>
           <label for="loan_date" class="block text-sm font-medium text-gray-700">Loan Date</label>
-          <input type="date" name="loan_date" id="loan_date"
-            value="{{ old('loan_date', $loan->loan_date->format('Y-m-d')) }}"
+          <input type="date" name="loan_date" id="loan_date" value="{{ old('loan_date', $loan->loan_date) }}"
             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             required>
           @error('loan_date')
@@ -52,7 +51,7 @@
         <div>
           <label for="return_date" class="block text-sm font-medium text-gray-700">Return Date</label>
           <input type="date" name="return_date" id="return_date"
-            value="{{ old('return_date', $loan->return_date ? $loan->return_date->format('Y-m-d') : '') }}"
+            value="{{ old('return_date', $loan->return_date ? $loan->return_date : '') }}"
             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
           @error('return_date')
             <span class="text-red-600 text-sm">{{ $message }}</span>
