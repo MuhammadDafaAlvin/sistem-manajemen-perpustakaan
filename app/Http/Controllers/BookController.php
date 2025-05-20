@@ -98,7 +98,7 @@ class BookController extends Controller
 
     public function publicIndex()
     {
-        $books = Book::with(['category', 'publisher', 'authors'])->paginate(12);
+        $books = Book::with(['category', 'publisher', 'authors'])->simplePaginate(12);
         return view('books.public', compact('books'));
     }
 }

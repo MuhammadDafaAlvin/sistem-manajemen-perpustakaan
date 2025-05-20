@@ -11,7 +11,7 @@ class LoanController extends Controller
 {
     public function index()
     {
-        $loans = Loan::with(['user', 'book'])->simplePaginate(7);
+        $loans = Loan::with(['user', 'book'])->latest()->simplePaginate(7);
         return view('loans.index', compact('loans'));
     }
 
@@ -39,7 +39,6 @@ class LoanController extends Controller
 
         Loan::create($request->all());
 
-        // Kurangi stok buku
         $book->decrement('stock');
 
         return redirect()->route('loans.index')->with('success', 'Loan created successfully.');
@@ -49,6 +48,7 @@ class LoanController extends Controller
     {
         $users = User::all();
         $books = Book::all();
+
         return view('loans.edit', compact('loan', 'users', 'books'));
     }
 
