@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-  <div class="bg-white shadow sm:rounded-lg">
-    <div class="px-4 py-5 sm:px-6">
-      <h3 class="text-lg leading-6 font-medium text-gray-900">Edit Author</h3>
+  <div class="bg-white shadow sm:rounded-3xl mt-4">
+    <div class="px-8 py-10 bg-gradient-to-r from-gray-50 to-gray-400 rounded-t-3xl">
+      <h3 class="text-3xl font-bold text-gray-900 tracking-tight">Edit Penulis</h3>
+      <p class="mt-2 text-base text-gray-600">Perbarui informasi penulis dengan data yang sesuai.</p>
     </div>
     <form action="{{ route('authors.update', $author) }}" method="POST" class="px-4 py-5 sm:p-6">
       @csrf
@@ -27,9 +28,13 @@
           @enderror
         </div>
       </div>
-      <div class="mt-6 flex justify-end">
+      <div class="mt-10 flex justify-end space-x-4">
+        <a href="{{ route('authors.index') }}"
+          class="inline-flex items-center px-6 py-3 border border-gray-200 text-sm font-semibold rounded-lg text-gray-700 bg-white hover:bg-gray-100">
+          Batal
+        </a>
         <button type="submit"
-          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">Update</button>
+          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">Perbarui</button>
       </div>
     </form>
   </div>

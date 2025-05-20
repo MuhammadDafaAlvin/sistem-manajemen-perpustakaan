@@ -1,9 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-  <div class="bg-white shadow overflow-hidden sm:rounded-lg max-w-7xl mx-auto">
-    <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
-      <h3 class="text-lg leading-6 font-medium text-gray-900">Penerbit</h3>
+  <div class="bg-white shadow overflow-hidden sm:rounded-3xl max-w-7xl mx-auto mt-4">
+    <div class="px-8 py-10 flex justify-between items-center">
+      <div class=" ml-[-0.5rem]">
+        <h3 class="text-3xl font-bold text-black tracking-tight">Daftar Penerbit</h3>
+        <p class="mt-2 text-base text-gray-600">Semua penerbit buku di perpustakaan</p>
+      </div>
       <a href="{{ route('publishers.create') }}"
         class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition duration-200">Tambah
         Penerbit</a>
