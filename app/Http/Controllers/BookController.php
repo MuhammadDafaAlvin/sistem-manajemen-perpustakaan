@@ -61,6 +61,12 @@ class BookController extends Controller
         return view('books.edit', compact('book', 'categories', 'publishers', 'authors'));
     }
 
+    public function show(Book $book)
+    {
+        $book = Book::with(['category', 'publisher', 'authors'])->findOrFail($book->id);
+        return view('books.show', compact('book'));
+    }
+
     public function update(Request $request, Book $book)
     {
         $request->validate([
@@ -96,9 +102,26 @@ class BookController extends Controller
         return redirect()->route('books.index')->with('success', 'Book deleted successfully.');
     }
 
-    public function publicIndex()
+    public function publicIndex(Request $request)
     {
-        $books = Book::with(['category', 'publisher', 'authors'])->simplePaginate(12);
+        $search = $request->query('search');
+
+        $books = Book::with(['category', 'publisher', 'authors'])
+            ->when($search, function ($query, $search) {
+                $query->where('title', 'LIKE', "%{$search}%")
+                    ->orWhere('isbn', 'LIKE', "%{$search}%")
+                    ->orWhereHas('category', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', "%{$search}%");
+                    })
+                    ->orWhereHas('publisher', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', "%{$search}%");
+                    })
+                    ->orWhereHas('authors', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', "%{$search}%");
+                    });
+            })
+            ->simplePaginate(12);
+
         return view('books.public', compact('books'));
     }
 }
