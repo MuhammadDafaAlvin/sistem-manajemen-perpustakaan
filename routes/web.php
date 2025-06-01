@@ -10,11 +10,12 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PublisherController;
 
 Route::get('/', [BookController::class, 'publicIndex'])->name('books.public');
+Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('books', BookController::class);
+    Route::resource('books', BookController::class)->except(['show']);
     Route::resource('categories', CategoryController::class);
     Route::resource('publishers', PublisherController::class);
     Route::resource('authors', AuthorController::class);
