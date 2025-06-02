@@ -6,7 +6,7 @@
       <h3 class="text-3xl font-bold text-white tracking-tight">Tambah Buku</h3>
       <p class="mt-2 text-base text-gray-400">Isi formulir berikut untuk menambahkan buku baru ke sistem.</p>
     </div>
-    <form action="{{ route('books.store') }}" method="POST" class="px-8 py-10">
+    <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data" class="px-8 py-10">
       @csrf
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Title -->
@@ -124,6 +124,20 @@
             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
           @enderror
         </div>
+      </div>
+
+      <!-- Tambahkan di dalam <form> setelah field description -->
+      <div class="sm:col-span-2">
+        <label for="cover_image" class="block text-sm font-medium text-gray-300">Gambar Sampul</label>
+        <div class="mt-1 relative">
+          <input type="file" name="cover_image" id="cover_image"
+            class="block w-full rounded-lg border {{ $errors->has('cover_image') ? 'border-red-500' : 'border-gray-700' }} bg-[#2a2a2a] px-4 py-3 text-white focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 sm:text-sm"
+            accept="image/jpeg,image/png">
+        </div>
+        <p class="mt-1 text-sm text-gray-500">Unggah gambar sampul (jpg/png, maks 2MB).</p>
+        @error('cover_image')
+          <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+        @enderror
       </div>
 
       <!-- Buttons -->

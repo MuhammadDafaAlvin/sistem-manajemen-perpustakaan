@@ -9,9 +9,21 @@ use Illuminate\Http\Request;
 
 class LoanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $loans = Loan::with(['user', 'book'])->latest()->simplePaginate(7);
+        $search = $request->query('search');
+
+        $loans = Loan::with(['book', 'user'])
+            ->when($search, function ($query, $search) {
+                $query->whereHas('book', function ($q) use ($search) {
+                    $q->where('title', 'LIKE', "%{$search}%");
+                })->orWhereHas('user', function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->simplePaginate(6);
+
         return view('loans.index', compact('loans'));
     }
 
@@ -62,7 +74,6 @@ class LoanController extends Controller
             'is_returned' => 'boolean',
         ]);
 
-        // Jika buku diubah, kembalikan stok buku lama dan kurangi stok buku baru
         if ($loan->book_id != $request->book_id) {
             $oldBook = Book::findOrFail($loan->book_id);
             $newBook = Book::findOrFail($request->book_id);

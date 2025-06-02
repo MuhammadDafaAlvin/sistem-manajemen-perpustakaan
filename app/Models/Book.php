@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Book extends Model
 {
@@ -16,7 +17,8 @@ class Book extends Model
         'category_id',
         'publisher_id',
         'stock',
-        'description'
+        'description',
+        'cover_image'
     ];
 
     public function category()
@@ -37,5 +39,10 @@ class Book extends Model
     public function loans()
     {
         return $this->hasMany(Loan::class);
+    }
+
+    public function getCoverImageUrlAttribute()
+    {
+        return $this->cover_image ? Storage::url($this->cover_image) : asset('images/default-cover.jpg');
     }
 }

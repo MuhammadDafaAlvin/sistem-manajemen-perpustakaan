@@ -7,9 +7,16 @@ use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $authors = Author::simplePaginate(7);
+        $search = $request->query('search');
+
+        $authors = Author::when($search, function ($query, $search) {
+            $query->where('name', 'LIKE', "%{$search}%");
+        })
+            ->latest()
+            ->simplePaginate(6);
+
         return view('authors.index', compact('authors'));
     }
 

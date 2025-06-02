@@ -7,9 +7,16 @@ use Illuminate\Http\Request;
 
 class PublisherController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $publishers = Publisher::simplePaginate(7);
+        $search = $request->query('search');
+
+        $publishers = Publisher::when($search, function ($query, $search) {
+            $query->where('name', 'LIKE', "%{$search}%");
+        })
+            ->latest()
+            ->simplePaginate(6);
+
         return view('publishers.index', compact('publishers'));
     }
 

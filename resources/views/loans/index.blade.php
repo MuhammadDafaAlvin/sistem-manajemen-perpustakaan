@@ -13,6 +13,22 @@
       </a>
     </div>
 
+    <div class="px-8 pb-6">
+      <form action="{{ route('loans.index') }}" method="GET" class="max-w-md">
+        <div class="flex items-center bg-[#2a2a2a] border border-gray-700 rounded-xl overflow-hidden">
+          <input type="text" name="search" value="{{ request('search') }}"
+            class="w-full px-4 py-2 bg-transparent text-white placeholder-gray-400 focus:outline-none sm:text-sm"
+            placeholder="Cari berdasarkan judul buku atau nama peminjam">
+          <button type="submit" class="px-4 py-2 text-gray-400 hover:text-white transition duration-150 ease-in-out">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+
     <div class="border-t border-gray-700">
       <table class="min-w-full divide-y divide-gray-700">
         <thead class="bg-[#2a2a2a] tracking-tight">

@@ -3,16 +3,35 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Author;
 use App\Models\Category;
 use App\Models\Publisher;
-use App\Models\Author;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $books = Book::with(['category', 'publisher', 'authors'])->latest()->simplePaginate(6);
+        $search = $request->query('search');
+
+        $books = Book::with(['category', 'publisher', 'authors'])
+            ->when($search, function ($query, $search) {
+                $query->where('title', 'LIKE', "%{$search}%")
+                    ->orWhere('isbn', 'LIKE', "%{$search}%")
+                    ->orWhereHas('category', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', "%{$search}%");
+                    })
+                    ->orWhereHas('publisher', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', "%{$search}%");
+                    })
+                    ->orWhereHas('authors', function ($q) use ($search) {
+                        $q->where('name', 'LIKE', "%{$search}%");
+                    });
+            })
+            ->latest()
+            ->simplePaginate(6);
+
         return view('books.index', compact('books'));
     }
 
@@ -36,22 +55,32 @@ class BookController extends Controller
             'description' => 'nullable|string',
             'authors' => 'required|array',
             'authors.*' => 'exists:authors,id',
+            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Validasi gambar
         ]);
 
-        $book = Book::create($request->only([
-            'title',
-            'isbn',
-            'publication_year',
-            'category_id',
-            'publisher_id',
-            'stock',
-            'description'
-        ]));
+        $coverImagePath = null;
+        if ($request->hasFile('cover_image')) {
+            $coverImagePath = $request->file('cover_image')->store('covers', 'public');
+        }
+
+        $book = Book::create(array_merge(
+            $request->only([
+                'title',
+                'isbn',
+                'publication_year',
+                'category_id',
+                'publisher_id',
+                'stock',
+                'description',
+            ]),
+            ['cover_image' => $coverImagePath]
+        ));
 
         $book->authors()->attach($request->authors);
 
-        return redirect()->route('books.index')->with('success', 'Book created successfully.');
+        return redirect()->route('books.index')->with('success', 'Buku berhasil dibuat.');
     }
+
 
     public function edit(Book $book)
     {
@@ -79,7 +108,15 @@ class BookController extends Controller
             'description' => 'nullable|string',
             'authors' => 'required|array',
             'authors.*' => 'exists:authors,id',
+            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Validasi gambar
         ]);
+
+        if ($request->hasFile('cover_image')) {
+            if ($book->cover_image) {
+                Storage::disk('public')->delete($book->cover_image);
+            }
+            $book->cover_image = $request->file('cover_image')->store('covers', 'public');
+        }
 
         $book->update($request->only([
             'title',
@@ -88,13 +125,14 @@ class BookController extends Controller
             'category_id',
             'publisher_id',
             'stock',
-            'description'
+            'description',
         ]));
 
         $book->authors()->sync($request->authors);
 
-        return redirect()->route('books.index')->with('success', 'Book updated successfully.');
+        return redirect()->route('books.index')->with('success', 'Buku berhasil diperbarui.');
     }
+
 
     public function destroy(Book $book)
     {

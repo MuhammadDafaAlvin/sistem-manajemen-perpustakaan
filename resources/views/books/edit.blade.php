@@ -129,6 +129,26 @@
         </div>
       </div>
 
+      <!-- Tambahkan setelah field description -->
+      <div class="sm:col-span-2">
+        <label for="cover_image" class="block text-sm font-medium text-gray-300">Gambar Sampul</label>
+        <div class="mt-1 relative">
+          <input type="file" name="cover_image" id="cover_image"
+            class="block w-full rounded-lg border {{ $errors->has('cover_image') ? 'border-red-500' : 'border-gray-700' }} bg-[#2a2a2a] px-4 py-3 text-white focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 sm:text-sm"
+            accept="image/jpeg,image/png">
+        </div>
+        <p class="mt-1 text-sm text-gray-500">Unggah gambar sampul baru (jpg/png, maks 2MB) untuk mengganti gambar lama.
+        </p>
+        @if ($book->cover_image)
+          <div class="mt-2">
+            <img src="{{ $book->cover_image_url }}" alt="{{ $book->title }}" class="h-32 w-auto rounded-lg">
+          </div>
+        @endif
+        @error('cover_image')
+          <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+        @enderror
+      </div>
+
       <!-- Buttons -->
       <div class="mt-10 flex justify-end space-x-4">
         <a href="{{ route('books.index') }}"
